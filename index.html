@@ -1,12 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculadora para Corredores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <h1>Calculadora para Corredores</h1>
+    <form id="calculadora">
+        <label for="ritmo">Ritmo de Carrera (min/km):</label>
+        <input type="number" id="ritmo" step="0.01" required><br>
+        <label for="distancia">Distancia (km):</label>
+        <input type="number" id="distancia" step="0.01" required><br>
+        <button type="button" onclick="calcularTiempo()">Calcular</button>
+    </form>
+    <h2 id="resultado"></h2>
+
+    <script>
+        function calcularTiempo() {
+            const ritmo = parseFloat(document.getElementById('ritmo').value);
+            const distancia = parseFloat(document.getElementById('distancia').value);
+           
+            if (isNaN(ritmo) || isNaN(distancia)) {
+                document.getElementById('resultado').innerText = "Por favor ingresa valores válidos.";
+                return;
+            }
+           
+            const tiempoTotalMinutos = ritmo * distancia;
+            const horas = Math.floor(tiempoTotalMinutos / 60);
+            const minutos = Math.floor(tiempoTotalMinutos % 60);
+            const segundos = Math.floor((tiempoTotalMinutos * 60) % 60);
+           
+            document.getElementById('resultado').innerText = `Tiempo total: ${horas} horas, ${minutos} minutos y ${segundos} segundos.`;
+        }
+    </script>
 </body>
 </html>
