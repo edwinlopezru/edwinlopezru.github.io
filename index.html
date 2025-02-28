@@ -7,27 +7,165 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        input, button {
-            margin: 10px;
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #3498db;
+            text-align: center;
+        }
+        
+        .calculadora-tabla {
+            width: 100%;
+            margin-bottom: 30px;
+            border-collapse: collapse;
+        }
+        
+        .calculadora-tabla td {
             padding: 10px;
+            vertical-align: middle;
+        }
+        
+        .calculadora-tabla tr td:first-child {
+            text-align: right;
+            width: 40%;
+            font-weight: bold;
+        }
+        
+        .calculadora-tabla tr td:last-child {
+            text-align: left;
+            width: 60%;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .resultado {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        /* Estilos responsive */
+        @media (max-width: 600px) {
+            .calculadora-tabla tr {
+                display: block;
+                margin-bottom: 10px;
+            }
+            
+            .calculadora-tabla tr td {
+                display: block;
+                width: 100%;
+                text-align: left;
+                padding: 5px;
+            }
+            
+            .calculadora-tabla tr td:first-child {
+                width: 100%;
+                text-align: left;
+                padding-bottom: 0;
+            }
+            
+            .calculadora-tabla tr td:last-child {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Calculadora para Corredores</h1>
-    <form id="calculadora">
-        <label for="ritmo">Ritmo de Carrera (min/km):</label>
-        <input type="number" id="ritmo" step="0.01" required><br>
-        <label for="distancia">Distancia (km):</label>
-        <input type="number" id="distancia" step="0.01" required><br>
-        <button type="button" onclick="calcularTiempo()">Calcular</button>
-    </form>
-    <h2 id="resultado"></h2>
-
+    <div class="container">
+        <h1>Calculadora para Corredores</h1>
+        
+        <h2>Calcular Tiempo Total</h2>
+        <table class="calculadora-tabla">
+            <tr>
+                <td><label for="ritmo">Ritmo de Carrera (min/km):</label></td>
+                <td><input type="number" id="ritmo" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td><label for="distancia">Distancia (km):</label></td>
+                <td><input type="number" id="distancia" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="button" onclick="calcularTiempo()">Calcular Tiempo</button>
+                </td>
+            </tr>
+        </table>
+        
+        <div id="resultado" class="resultado">Los resultados se mostrarán aquí</div>
+        
+        <h2>Calcular Ritmo Necesario</h2>
+        <table class="calculadora-tabla">
+            <tr>
+                <td><label for="tiempoHoras">Tiempo Objetivo (horas):</label></td>
+                <td><input type="number" id="tiempoHoras" min="0" value="0" step="1"></td>
+            </tr>
+            <tr>
+                <td><label for="tiempoMinutos">Tiempo Objetivo (minutos):</label></td>
+                <td><input type="number" id="tiempoMinutos" min="0" max="59" value="0" step="1"></td>
+            </tr>
+            <tr>
+                <td><label for="tiempoSegundos">Tiempo Objetivo (segundos):</label></td>
+                <td><input type="number" id="tiempoSegundos" min="0" max="59" value="0" step="1"></td>
+            </tr>
+            <tr>
+                <td><label for="distanciaObjetivo">Distancia (km):</label></td>
+                <td><input type="number" id="distanciaObjetivo" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="button" onclick="calcularRitmo()">Calcular Ritmo Necesario</button>
+                </td>
+            </tr>
+        </table>
+        
+        <div id="resultadoRitmo" class="resultado">Los resultados se mostrarán aquí</div>
+    </div>
+    
     <script>
         function calcularTiempo() {
             const ritmo = parseFloat(document.getElementById('ritmo').value);
@@ -44,6 +182,31 @@
             const segundos = Math.floor((tiempoTotalMinutos * 60) % 60);
            
             document.getElementById('resultado').innerText = `Tiempo total: ${horas} horas, ${minutos} minutos y ${segundos} segundos.`;
+        }
+        
+        function calcularRitmo() {
+            const horas = parseInt(document.getElementById('tiempoHoras').value) || 0;
+            const minutos = parseInt(document.getElementById('tiempoMinutos').value) || 0;
+            const segundos = parseInt(document.getElementById('tiempoSegundos').value) || 0;
+            const distancia = parseFloat(document.getElementById('distanciaObjetivo').value);
+            
+            if (isNaN(distancia) || distancia <= 0) {
+                document.getElementById('resultadoRitmo').innerText = "Por favor ingresa una distancia válida.";
+                return;
+            }
+            
+            if (horas === 0 && minutos === 0 && segundos === 0) {
+                document.getElementById('resultadoRitmo').innerText = "Por favor ingresa un tiempo objetivo válido.";
+                return;
+            }
+            
+            const tiempoTotalMinutos = (horas * 60) + minutos + (segundos / 60);
+            const ritmoMinutos = tiempoTotalMinutos / distancia;
+            
+            const ritmoMin = Math.floor(ritmoMinutos);
+            const ritmoSeg = Math.floor((ritmoMinutos - ritmoMin) * 60);
+            
+            document.getElementById('resultadoRitmo').innerText = `Ritmo necesario: ${ritmoMin} min ${ritmoSeg} seg por km`;
         }
     </script>
 </body>
